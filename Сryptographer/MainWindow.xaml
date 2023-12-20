@@ -1,0 +1,107 @@
+﻿<Window x:Class="Сryptographer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Сryptographer"
+        mc:Ignorable="d"
+        Icon="Resources/Cryptographer.ico"
+        Title="Cryptographer by Mev0" Height="445" Width="786">
+    <Window.Resources>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="LightSlateGray"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="Slider">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <TextBlock x:Key="TextExample">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ante justo, bibendum non viverra eu, tristique id erat. Etiam suscipit accumsan lacus, pharetra lacinia augue tempus at. Phasellus nec est porta, faucibus tortor ut, mollis tellus. Quisque condimentum congue sem in fringilla. Donec pretium ipsum quis orci fermentum vulputate. Sed est purus, gravida ac accumsan at, accumsan sed enim. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam erat volutpat. In non iaculis risus, a blandit ex. Quisque facilisis viverra nunc, sit amet tincidunt augue venenatis sit amet. Donec massa eros, rhoncus eget purus at, vulputate tempor ipsum. Mauris dapibus neque nisl, nec porttitor nunc sodales nec. Nam justo purus, tempus vitae finibus nec, posuere id erat. Fusce mollis pharetra euismod. Pellentesque et justo bibendum, hendrerit eros quis, placerat dolor.</TextBlock>
+    </Window.Resources>
+    <Grid Background="BlanchedAlmond">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <ComboBox x:Name="leftComboBox" SelectionChanged="ComboBox_SelectionChanged">
+                <ComboBoxItem Content="Зашифровать" IsSelected="True"/>
+                <ComboBoxItem Content="Расшифровать"/>
+            </ComboBox>
+            <TextBox Text="{Binding LeftText, UpdateSourceTrigger=PropertyChanged}" d:Text="{Binding Source={StaticResource TextExample}, Path=Text}" Grid.Row="1" TextWrapping="Wrap"/>
+        </Grid>
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <ComboBox x:Name="RightComboBox" SelectionChanged="ComboBox_SelectionChanged">
+                <ComboBoxItem Content="Зашифровать"/>
+                <ComboBoxItem Content="Расшифровать" IsSelected="True"/>
+            </ComboBox>
+            <TextBox Text="{Binding RightText, UpdateSourceTrigger=PropertyChanged}" d:Text="{Binding Source={StaticResource TextExample}, Path=Text}" Grid.Row="1" TextWrapping="Wrap"/>
+            <GridSplitter HorizontalAlignment="Left" Height="100" Grid.Row="1" VerticalAlignment="Top" Width="5"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <ComboBox x:Name="cypherComboBox" SelectionChanged="cypherComboBox_SelectionChanged" SelectedIndex="{Binding CryptoMode}">
+                <ComboBoxItem Content="Шифр Цезаря" IsSelected="True"/>
+                <ComboBoxItem Content="AES" IsSelected="False"/>
+            </ComboBox>
+            <Button Grid.Row="1" Content="↔" Width="24" Height="24" FontSize="16" FontWeight="Bold"  Click="Button_Click"/>
+            <Grid Grid.Row="2" x:Name="shiftSelect">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.ColumnSpan="2" Content="Шаг"/>
+                <Slider Grid.Row="1" Maximum="33" Minimum="0" Value="{Binding Shift, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Shift, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+            <Grid x:Name="AESSettings" Grid.Row="3" IsEnabled="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="4*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Впишите ключ для aes длиной 16, 24, либо 32 символа" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
+                <TextBox Grid.Row="1" Text="{Binding AESKey, UpdateSourceTrigger=PropertyChanged}" FontSize="12" TextWrapping="Wrap"/>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <Button Content="Random" FontSize="12" Margin=" 0 5 0 0" Click="ButtonRandom_Click"/>
+                    <Label x:Name="keyStatus" Content="{Binding AESKeyStatus, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" HorizontalAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
